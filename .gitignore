@@ -41,3 +41,16 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# IDEA
+*.properties
+*.iml
+*idea/
+*gen/
+*out/
+*.txt
+!AndroidManifest.xml
+*.gitignore
+*assets/
+*build.xml
+!layout/
