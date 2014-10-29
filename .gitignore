@@ -51,6 +51,5 @@ Temporary Items
 *.txt
 !AndroidManifest.xml
 *.gitignore
-*assets/
 *build.xml
 !layout/

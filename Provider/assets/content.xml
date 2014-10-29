@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<lesson level="4" unit="1" unit_name="Test of unit" lesson_number="1">
+    <card>
+        <text>Text 1.</text>
+        <image>1</image>
+        <audio>1</audio>
+    </card>
+    <card>
+        <text>Text 2.</text>
+        <image>2</image>
+        <audio>2</audio>
+    </card>    
+</lesson>
