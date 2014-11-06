@@ -1,5 +1,6 @@
 package com.cardviewer.client.viewer;
 
+import android.app.ActionBar;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
@@ -14,6 +15,8 @@ import com.cardviewer.Common.Card;
 import com.cardviewer.Common.CardImpl;
 import com.cardviewer.Common.Utils;
 import com.cardviewer.client.R;
+import com.cardviewer.client.navigation.Item;
+import com.cardviewer.client.navigation.ItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,9 @@ import java.util.List;
  * ViewActivity
  */
 public class ViewActivity extends FragmentActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>, ViewPager.OnPageChangeListener {
+        implements LoaderManager.LoaderCallbacks<Cursor>,
+                           ViewPager.OnPageChangeListener,
+                           ActionBar.OnNavigationListener{
 
     private static final int URL_LOADER = 0;
     private Uri contentUri;
@@ -85,6 +90,28 @@ public class ViewActivity extends FragmentActivity
         CardAdapter adapter = new CardAdapter(getSupportFragmentManager(), cards);
         mViewPager.setAdapter(adapter);
         managePageNumber(mViewPager.getCurrentItem() + 1);
+        setNavigation(cards);
+    }
+
+    private void setNavigation(List<Card> cards) {
+        ItemAdapter adapter = new ItemAdapter(this);
+        for (final Card c : cards) {
+            adapter.add(new Item() {
+                @Override
+                public String getName() {
+                    return c.getText();
+                }
+
+                @Override
+                public String getValue() {
+                    return null;
+                }
+            });
+        }
+        if (getActionBar() != null) {
+            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            getActionBar().setListNavigationCallbacks(adapter, this);
+        }
     }
 
 
@@ -137,5 +164,11 @@ public class ViewActivity extends FragmentActivity
     @Override
     public void onPageScrollStateChanged(int i) {
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int i, long l) {
+        mViewPager.setCurrentItem(i, false);
+        return true;
     }
 }

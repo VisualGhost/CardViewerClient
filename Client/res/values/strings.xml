@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">Card Viewer</string>
     <string name="done">Done!</string>
+    <string name="level">Level</string>
+    <string name="unit">Unit</string>
+    <string name="lesson">Lesson</string>
 </resources>

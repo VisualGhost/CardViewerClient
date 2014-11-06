@@ -15,9 +15,10 @@ public class Utils {
     public static final String COLUMN_UNIT_NAME = "unit_name";
     public static final String COLUMN_LESSON_NUMBER = "lesson_number";
 
+    public static final String COM_CARDVIEWER_PROVIDER = "com.cardviewer.provider.";
     private Utils(){}
 
     public static boolean isCorrectProvider(String authority){
-        return authority.contains("com.cardviewer.provider.");
+        return authority.contains(COM_CARDVIEWER_PROVIDER);
     }
 }

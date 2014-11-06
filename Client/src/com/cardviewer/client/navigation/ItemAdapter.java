@@ -1,7 +1,6 @@
 package com.cardviewer.client.navigation;
 
 import android.content.Context;
-import android.content.pm.ProviderInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,30 +11,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * LessonAdapter
+ * ItemAdapter
  */
-public class LessonAdapter extends BaseAdapter {
+public class ItemAdapter extends BaseAdapter {
 
-    private List<ProviderInfo> mProviderInfos;
+    private List<Item> mItems;
     private Context mContext;
 
-    LessonAdapter(final Context context) {
-        mProviderInfos = new ArrayList<ProviderInfo>();
+    public ItemAdapter(final Context context) {
+        mItems = new ArrayList<Item>();
         mContext = context;
     }
 
-    public void add(ProviderInfo providerInfo) {
-        mProviderInfos.add(providerInfo);
+    public void add(Item item) {
+        mItems.add(item);
     }
 
     @Override
     public int getCount() {
-        return mProviderInfos.size();
+        return mItems.size();
     }
 
     @Override
-    public ProviderInfo getItem(final int position) {
-        return mProviderInfos.get(position);
+    public Object getItem(final int position) {
+        return mItems.get(position);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class LessonAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) rowView.getTag();
         }
-        viewHolder.title.setText(mProviderInfos.get(position).authority);
+        viewHolder.title.setText(mItems.get(position).getName());
         return rowView;
     }
 
