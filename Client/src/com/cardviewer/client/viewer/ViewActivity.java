@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
+import android.widget.TextView;
 import com.cardviewer.Common.Card;
 import com.cardviewer.Common.CardImpl;
 import com.cardviewer.Common.Utils;
@@ -20,11 +21,13 @@ import java.util.List;
 /**
  * ViewActivity
  */
-public class ViewActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ViewActivity extends FragmentActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>, ViewPager.OnPageChangeListener {
 
     private static final int URL_LOADER = 0;
     private Uri contentUri;
     private ViewPager mViewPager;
+    private TextView mCardNumber;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class ViewActivity extends FragmentActivity implements LoaderManager.Load
         contentUri = Uri.parse(getIntent().getStringExtra(Utils.AUTHORITY));
         getLoaderManager().initLoader(URL_LOADER, null, this);
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setOnPageChangeListener(this);
+        mCardNumber = (TextView) findViewById(R.id.card_number);
     }
 
     @Override
@@ -55,15 +60,15 @@ public class ViewActivity extends FragmentActivity implements LoaderManager.Load
     }
 
 
-    private String[] getProjection(){
-        return new String[] {"_id",
-                                    Utils.COLUMN_NAME,
-                                    Utils.COLUMN_IMAGE,
-                                    Utils.COLUMN_AUDIO,
-                                    Utils.COLUMN_LEVEL_NUMBER,
-                                    Utils.COLUMN_UNIT_NUMBER,
-                                    Utils.COLUMN_UNIT_NAME,
-                                    Utils.COLUMN_LESSON_NUMBER
+    private String[] getProjection() {
+        return new String[]{"_id",
+                                   Utils.COLUMN_NAME,
+                                   Utils.COLUMN_IMAGE,
+                                   Utils.COLUMN_AUDIO,
+                                   Utils.COLUMN_LEVEL_NUMBER,
+                                   Utils.COLUMN_UNIT_NUMBER,
+                                   Utils.COLUMN_UNIT_NAME,
+                                   Utils.COLUMN_LESSON_NUMBER
         };
     }
 
@@ -79,6 +84,20 @@ public class ViewActivity extends FragmentActivity implements LoaderManager.Load
         }
         CardAdapter adapter = new CardAdapter(getSupportFragmentManager(), cards);
         mViewPager.setAdapter(adapter);
+        managePageNumber(mViewPager.getCurrentItem() + 1);
+    }
+
+
+    private void managePageNumber(int number) {
+        int total = mViewPager.getAdapter() != null ? mViewPager.getAdapter().getCount() : 0;
+        if (mCardNumber != null) {
+            if (number == total) {
+                mCardNumber.setText(getString(R.string.done));
+            } else {
+                mCardNumber.setText(String.valueOf(number) + "/" + String.valueOf(total));
+
+            }
+        }
     }
 
 
@@ -103,5 +122,20 @@ public class ViewActivity extends FragmentActivity implements LoaderManager.Load
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i2) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+        managePageNumber(i + 1);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
     }
 }
