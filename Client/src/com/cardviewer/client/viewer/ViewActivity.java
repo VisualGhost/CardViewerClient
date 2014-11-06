@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import com.cardviewer.Common.Card;
 import com.cardviewer.Common.CardImpl;
 import com.cardviewer.Common.Utils;
@@ -28,6 +29,7 @@ public class ViewActivity extends FragmentActivity implements LoaderManager.Load
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUpActionBar();
         setContentView(R.layout.main);
         contentUri = Uri.parse(getIntent().getStringExtra(Utils.AUTHORITY));
         getLoaderManager().initLoader(URL_LOADER, null, this);
@@ -83,5 +85,23 @@ public class ViewActivity extends FragmentActivity implements LoaderManager.Load
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
 
+    }
+
+    private void setUpActionBar() {
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
