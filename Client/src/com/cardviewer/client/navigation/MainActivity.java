@@ -20,19 +20,19 @@ public class MainActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ProviderFinder mProviderFinder = new ProviderFinder(this);
-        List<ProviderInfo> providers = mProviderFinder.getProviders();
+        List<com.cardviewer.client.navigation.LessonItem> lessonItems = mProviderFinder.getProviders();
         mAdapter = new ItemAdapter(this);
-        if (providers.size() > 0) {
-            for (final ProviderInfo info : providers) {
+        if (lessonItems.size() > 0) {
+            for (final com.cardviewer.client.navigation.LessonItem info : lessonItems) {
                 mAdapter.add(new Item() {
                     @Override
                     public String getName() {
-                        return transformAuthority(info.authority);
+                        return getLessonParameters(info.getLevel(), info.getUnit(), info.getLesson());
                     }
 
                     @Override
                     public String getValue() {
-                        return info.authority;
+                        return info.getAuthority();
                     }
                 });
             }
@@ -46,50 +46,20 @@ public class MainActivity extends ListActivity {
         });
     }
 
-    private String transformAuthority(String authority) {
-        String levelUnitLesson = authority != null ? authority.replace(Utils.COM_CARDVIEWER_PROVIDER, "") : "";
-        String[] elements = levelUnitLesson.split("_");
-        LessonItem item = new LessonItem(elements[0], elements[1], elements[2]);
-        return item.getLessonParameters();
-    }
-
-    class LessonItem {
-        String level;
-        String unit;
-        String lesson;
-
-        final static String L = "L";
-        final static String U = "U";
-        final static String DELIMITER = " > ";
-
-        LessonItem(String level, String unit, String lesson) {
-            this.level = level;
-            this.unit = unit;
-            this.lesson = lesson;
-        }
-
-        String getLevel() {
-            return getString(R.string.level) +" "+ level.replace(L, "");
-        }
-
-        String getUnit() {
-            return getString(R.string.unit) +" "+ unit.replace(U, "");
-        }
-
-        String getLesson() {
-            return getString(R.string.lesson) +" "+ lesson.replace(L, "");
-        }
-
-        String getLessonParameters() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getLevel());
-            stringBuilder.append(DELIMITER);
-            stringBuilder.append(getUnit());
-            stringBuilder.append(DELIMITER);
-            stringBuilder.append(getLesson());
-            return stringBuilder.toString();
-        }
-
+    String getLessonParameters(String level, String unit, String lesson) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getString(R.string.level));
+        stringBuilder.append(" ");
+        stringBuilder.append(level);
+        stringBuilder.append(" - ");
+        stringBuilder.append(getString(R.string.unit));
+        stringBuilder.append(" ");
+        stringBuilder.append(unit);
+        stringBuilder.append(" - ");
+        stringBuilder.append(getString(R.string.lesson));
+        stringBuilder.append(" ");
+        stringBuilder.append(lesson);
+        return stringBuilder.toString();
     }
 
     private void startLesson(final String authority) {
