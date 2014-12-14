@@ -20,17 +20,27 @@ public class ProviderFinder {
         mPackageManager = context.getPackageManager();
     }
 
-    public List<ProviderInfo> getProviders() {
+    public List<LessonItem> getProviders() {
         List<ProviderInfo> allProviders = mPackageManager.queryContentProviders(null, 0, 0);
-        List<ProviderInfo> ourProvider = null;
+        List<LessonItem> ourProvider = null;
         for (ProviderInfo info : allProviders) {
-            if (Utils.isCorrectProvider(info.authority)) {
+            String authority = info.authority;
+            if (Utils.isCorrectProvider(authority)) {
                 if (ourProvider == null) {
-                    ourProvider = new ArrayList<ProviderInfo>();
+                    ourProvider = new ArrayList<LessonItem>();
                 }
-                ourProvider.add(info);
+                ourProvider.add(getLesson(authority));
             }
         }
-        return ourProvider == null ? Collections.<ProviderInfo>emptyList() : ourProvider;
+        if(ourProvider!=null){
+            Collections.sort(ourProvider);
+        }
+        return ourProvider == null ? Collections.<LessonItem>emptyList() : ourProvider;
+    }
+
+    private LessonItem getLesson(String authority) {
+        String levelUnitLesson = authority != null ? authority.replace(Utils.COM_CARDVIEWER_PROVIDER, "") : "";
+        String[] elements = levelUnitLesson.split("_");
+        return new LessonItem(authority, elements[0], elements[1], elements[2]);
     }
 }
